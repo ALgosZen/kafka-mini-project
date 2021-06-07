@@ -6,7 +6,7 @@ Building A Streaming Fraud Detection System With Kafka + Python + Docker Compose
 ![Application Design](images/diagram3.png)
 ![Application Design](images/diagram4.png)
 
-#Project Structure
+### Project Structure
 
 ```
 ├── detector
@@ -55,7 +55,7 @@ docker-compose.kafka.yml
              name: kafka-network
 
 ```
-## Application container
+### Application container
 We implement our application followed the single-event processing design pattern such that the pruducer writes transaction events into one topic and the consumer reads events in that topic and uses a helper function to classify the event type (legit/fraud). To connect our app container group with Kafka container group, we use the same network configuration in docker-compose file and connect our app to kafka borker through enrionment variable `KAFKA_BROKER_URL: broker:9092`
 
 ![Application Design](images/dockerup.png)
