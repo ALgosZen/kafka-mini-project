@@ -56,10 +56,7 @@ docker-compose.kafka.yml
 
 ```
 ### Application container
-We implement our application followed the single-event processing design pattern such that the pruducer writes transaction events into one topic and the consumer reads events in that topic and uses a helper function to classify the event type (legit/fraud). To connect our app container group with Kafka container group, we use the same network configuration in docker-compose file and connect our app to kafka borker through enrionment variable `KAFKA_BROKER_URL: broker:9092`
-
-![Application Design](images/dockerup.png)
-
+We implement our application followed the single-event processing design pattern such that the pruducer writes transaction events into one topic and the consumer reads events in that topic and uses a helper function to classify the event type (legit/fraud). 
 
 `docker-compose.yml`:
 ```
@@ -86,17 +83,17 @@ We implement our application followed the single-event processing design pattern
              name: kafka-network
 ```
 
-* ***How to generate the transation?*** We define a simple transaction schema (```source: str, target: str, amount: float, currency: str```) then generate random transaction records using a helper function.
 * ***How to classify events?***: We assume that a transaction event is fraud if its amount exceed $900.
 
 
 ## How to run
 * Step 1: Create docker network and build and start the kafka container
+To connect our app container group with Kafka container group, we use the same network configuration in docker-compose file and connect our app to kafka borker through enrionment variable `KAFKA_BROKER_URL: broker:9092`
 
 ```
 docker-compose -f docker-compose.kafka.yml build && docker-compose -f docker-compose.kafka.yml up
 ```
-
+![Application Design](images/dockerup.png)
 
 * Step 2: Build and start our application container (generator and detector)
 ```
@@ -110,6 +107,18 @@ docker-compose -f docker-compose.kafka.yml exec broker kafka-console-consumer --
 ```
 
 ## Teardown 
+
+*stop all running containers
+
 ```
-docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+docker stop $(docker ps -aq)
+```
+* Remove all containers
+```
+docker rm $(docker ps -aq)
+```
+Remove all images
+```
+docker rmi $(docker images -q)
+
 ```
